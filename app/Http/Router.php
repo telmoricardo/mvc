@@ -4,6 +4,7 @@ namespace App\Http;
 use \Closure;
 use \Exception;
 use \ReflectionFunction;
+use App\Http\Middleware\Queue as MiddlewareQuere;
 
 class Router
 {
@@ -69,6 +70,9 @@ class Router
                 continue;
             endif;
         endforeach;
+
+        //middlewares das rotas
+        $params['middlewares'] = $params['middlewares']  ?? [];
 
         //variaveis das rota
         $params['variables'] = [];
@@ -200,13 +204,14 @@ class Router
                 $args[$name] = $route['variables'][$name] ?? '';
             endforeach;
 
+            //RETORNA A EXECUÇÃO DA FILA DE MIDDLEWARE
+            return (new MiddlewareQuere($route['middlewares'],$route['controller'], $args))->next($this->request);
 
-            //retorna a execução da função
-            return call_user_func_array($route['controller'], $args);
         }catch (Exception $e){
             return new Response($e->getCode(), $e->getMessage());
         }
     }
+
 
     /**
      * metodo responsavem retornar a url atual
