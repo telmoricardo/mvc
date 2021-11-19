@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Model\Entity\User;
 use App\Utils\View;
+use App\Session\Admin\Login as SeessionAdminLogin;
 
 class Login extends  Page
 {
@@ -39,5 +40,23 @@ class Login extends  Page
         if(!password_verify($senha, $obj->senha)){
             return self::getLogin($request, 'Email ou senha invalidos');
         }
+
+        //cria a sessão de login
+        SeessionAdminLogin::login($obj);
+
+        //redireciona o usuario para home admin
+        $request->getRouter()->redirect('/admin');
+    }
+
+    /**
+     * metodo responsavel por deslogar o usuario
+     * @param $request
+     */
+    public static function setLogout($request){
+        //destroy a sessão de login
+        SeessionAdminLogin::logout();
+
+        //redireciona o usuario para a tela de login
+        $request->getRouter()->redirect('/admin/login');
     }
 }
