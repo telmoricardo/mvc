@@ -67,10 +67,6 @@ class Queue{
         self::$default = $default;
     }
 
-
-
-
-
     /**
      * metodo responsavel por executar o proximo nivel da middlewares
      * @param $request
