@@ -6,11 +6,19 @@ namespace Composer\Autoload;
 
 class ComposerStaticInitb8778ce72180412f4f36eb3676391257
 {
+    public static $files = array (
+        '3109cb1a231dcd04bee1f9f620d46975' => __DIR__ . '/..' . '/paragonie/sodium_compat/autoload.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
         'W' => 
         array (
             'WilliamCosta\\DotEnv\\' => 20,
             'WilliamCosta\\DatabaseManager\\' => 29,
+        ),
+        'F' => 
+        array (
+            'Firebase\\JWT\\' => 13,
         ),
         'A' => 
         array (
@@ -26,6 +34,10 @@ class ComposerStaticInitb8778ce72180412f4f36eb3676391257
         'WilliamCosta\\DatabaseManager\\' => 
         array (
             0 => __DIR__ . '/..' . '/william-costa/database-manager/src',
+        ),
+        'Firebase\\JWT\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
         ),
         'App\\' => 
         array (

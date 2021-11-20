@@ -32,6 +32,8 @@ class Router
      */
     private $request;
 
+    private $contentType = 'text/html';
+
 
     /**
      * Método responsavel por iniciar a classe
@@ -42,6 +44,14 @@ class Router
         $this->request = new Request($this);
         $this->url = $url;
         $this->setPrefix();
+    }
+
+    /**
+     * metodo resposavel por mudar o valor content type
+     * @param $contentType
+     */
+    public function setContentType($contentType){
+        $this->contentType = $contentType;
     }
 
     /**
@@ -83,6 +93,9 @@ class Router
             $route = preg_replace($patterVariables, '(.*?)',$route);
             $params['variables'] = $matches[1];
         endif;
+
+        //remove a barra no final da rota
+        $route = rtrim($route, '/');
 
         //padrão de validação da url
         $patterRoute = '/^'.str_replace('/','\/', $route).'$/';
@@ -140,7 +153,7 @@ class Router
         $xUri = strlen($this->prefix) ? explode($this->prefix,$uri) : [$uri];
 
         //retorna a uri sem prefixo
-        return end($xUri);
+        return rtrim(end($xUri), '/');
     }
 
     /**
@@ -167,7 +180,6 @@ class Router
                     $keys = $methods[$httpMethod]['variables'];
                     $methods[$httpMethod]['variables'] = array_combine($keys,$matches);
                     $methods[$httpMethod]['variables']['request'] = $this->request;
-
 
                    //retorno dos parametros da rota
                    return $methods[$httpMethod];
@@ -208,10 +220,27 @@ class Router
             return (new MiddlewareQuere($route['middlewares'],$route['controller'], $args))->next($this->request);
 
         }catch (Exception $e){
-            return new Response($e->getCode(), $e->getMessage());
+            return new Response($e->getCode(), $this->getErrorMessage($e->getMessage()), $this->contentType);
         }
     }
 
+    /**
+     * metodo responsavel por erro de acordo com content type
+     * @param $message
+     */
+    private function getErrorMessage($message){
+        switch ($this->contentType){
+            case 'application/json':
+                return [
+                    'error' => $message
+                ];
+                break;
+
+            default:
+                return $message;
+                break;
+        }
+    }
 
     /**
      * metodo responsavem retornar a url atual

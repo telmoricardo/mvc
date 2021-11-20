@@ -50,10 +50,26 @@ class Request
     {
         $this->router      = $router;
         $this->queryParams = $_GET ?? [];
-        $this->postVars    = $_POST ?? [];
         $this->headers     = getallheaders();
         $this->httpMethod  = $_SERVER['REQUEST_METHOD'] ?? '';
         $this->setUri();
+        $this->setPostVars();
+
+    }
+
+    /**
+     * METODO RESPONSAVEL POR DEFINIAR AS VARIAVEIS DO POST
+     * @return false|void
+     */
+    public function setPostVars(){
+        if($this->httpMethod == 'GET') return false;
+
+        //POST PADRÃO
+        $this->postVars    = $_POST ?? [];
+
+        //post json
+        $inputRaw = file_get_contents('php://input');
+        $this->postVars = (strlen($inputRaw) && empty($_POST)) ? json_decode($inputRaw,true) : $this->postVars;
 
     }
 
