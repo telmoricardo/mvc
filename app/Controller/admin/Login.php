@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\admin;
 
 use App\Model\Entity\User;
 use App\Utils\View;
@@ -13,15 +13,15 @@ class Login extends  Page
      * @param $request
      */
     public static function getLogin($request, $errorMessage = null){
-        $status = !is_null($errorMessage) ? View::render('admin/login/status', [
-            'mensagem' => $errorMessage
-        ]) : '';
+        //STATUS
+        $status = !is_null($errorMessage) ? Alert::getError($errorMessage) : '';
 
+        //CONTEUDO DA PÁGINA DE LOGIN
         $content = View::render('admin/login', [
             'status' => $status
         ]);
 
-        //
+        //RETORNA A PÁGINA COMPLETA
         return parent::getPage('Login > Telmo Ricardo', $content);
     }
 

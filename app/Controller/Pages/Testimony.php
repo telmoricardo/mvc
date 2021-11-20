@@ -73,11 +73,7 @@ class Testimony extends Page {
                 'data' => date('d/m/Y', strtotime($obj->data))
             ]);
         }
-
-
-
         return $itens;
-
     }
 
 }

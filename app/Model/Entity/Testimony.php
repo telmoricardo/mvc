@@ -11,7 +11,10 @@ class Testimony
     public $mensagem;
     public $data;
 
-
+    /**
+     * metodo responsavel por cadastrar
+     * @return bool
+     */
     public function cadastrar(){
         $this->data = date('Y-m-d H:i:s');
 
@@ -25,6 +28,27 @@ class Testimony
     }
 
     /**
+     * metodo responsavel por atualizar
+     * @return bool
+     */
+    public function atualizar(){
+
+        return  (new Database('depoimentos'))->update('id = '.$this->id, [
+            'nome' => $this->nome,
+            'mensagem' => $this->mensagem
+        ]);
+
+    }
+
+    /**
+     * metodo responsavel por excluir
+     * @return bool
+     */
+    public function excluir(){
+        return  (new Database('depoimentos'))->delete('id = '.$this->id);
+    }
+
+    /**
      * Metodo responseval por retornas depoimnentps
      * @param string $where
      * @param string $order
@@ -34,6 +58,14 @@ class Testimony
      */
     public function getTestimonies($where=null, $order=null, $limit= null, $fields = '*'){
         return (new Database('depoimentos'))->select($where,$order,$limit,$fields);
+    }
+
+    /**
+     * Metodo responseval por retornas um depoimento com base no seu ID
+     * @param integer $id
+     */
+    public function getTestimonyById($id){
+        return self::getTestimonies('id = '.$id)->fetchObject(self::class);
     }
 
 }
